@@ -1,12 +1,12 @@
 // This is your test publishable API key.
 const stripe = Stripe(
-  'pk_test_51MHPPyHnPYMU1A0mHUh5dB1j9LGyqYbe5adv9stqicQtriUHDYEnWhJfCBH3eulncTKdc1fK8MNyXPANHps10O9z00hzwuq8SI'
+  "pk_test_51Q56lJAMQRVWu0C5QahzDUq7PF2DXMtH7f8TjgfrqJC90kL10Wm7FnXWGpVFDhb0OefEJLlHXqNKP7A89B9zFsMJ00wVzrLZt9"
 );
 
 // The items the customer wants to buy
 const purchase = [
-  { id: '1', name: 't-shirt', price: 1999 },
-  { id: '2', name: 'shoes', price: 4999 },
+  { id: "1", name: "t-shirt", price: 1999 },
+  { id: "2", name: "shoes", price: 4999 }
 ];
 const total_amount = 10998;
 const shipping_fee = 1099;
@@ -16,32 +16,29 @@ let elements;
 initialize();
 
 document
-  .querySelector('#payment-form')
-  .addEventListener('submit', handleSubmit);
+  .querySelector("#payment-form")
+  .addEventListener("submit", handleSubmit);
 
 // Fetches a payment intent and captures the client secret
 async function initialize() {
-  const response = await fetch('/create-payment-intent', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ purchase, total_amount, shipping_fee }),
+  const response = await fetch("/create-payment-intent", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ purchase, total_amount, shipping_fee })
   });
   const { clientSecret, dpmCheckerLink } = await response.json();
 
   const appearance = {
-    theme: 'stripe',
+    theme: "stripe"
   };
   elements = stripe.elements({ appearance, clientSecret });
 
   const paymentElementOptions = {
-    layout: 'tabs',
+    layout: "tabs"
   };
 
-  const paymentElement = elements.create(
-    'payment',
-    paymentElementOptions
-  );
-  paymentElement.mount('#payment-element');
+  const paymentElement = elements.create("payment", paymentElementOptions);
+  paymentElement.mount("#payment-element");
 
   // [DEV] For demo purposes only
   setDpmCheckerLink(dpmCheckerLink);
@@ -55,8 +52,8 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: 'http://localhost:5000/complete.html',
-    },
+      return_url: "http://localhost:5000/complete.html"
+    }
   });
 
   console.log(error);
@@ -66,10 +63,7 @@ async function handleSubmit(e) {
   // your `return_url`. For some payment methods like iDEAL, your customer will
   // be redirected to an intermediate site first to authorize the payment, then
   // redirected to the `return_url`.
-  if (
-    error.type === 'card_error' ||
-    error.type === 'validation_error'
-  ) {
+  if (error.type === "card_error" || error.type === "validation_error") {
     showMessage(error.message);
   } else {
     showMessage("Une erreur inattendue s'est produite.");
@@ -81,14 +75,14 @@ async function handleSubmit(e) {
 // ------- UI helpers -------
 
 function showMessage(messageText) {
-  const messageContainer = document.querySelector('#payment-message');
+  const messageContainer = document.querySelector("#payment-message");
 
-  messageContainer.classList.remove('hidden');
+  messageContainer.classList.remove("hidden");
   messageContainer.textContent = messageText;
 
   setTimeout(function () {
-    messageContainer.classList.add('hidden');
-    messageContainer.textContent = '';
+    messageContainer.classList.add("hidden");
+    messageContainer.textContent = "";
   }, 4000);
 }
 
@@ -96,16 +90,16 @@ function showMessage(messageText) {
 function setLoading(isLoading) {
   if (isLoading) {
     // Disable the button and show a spinner
-    document.querySelector('#submit').disabled = true;
-    document.querySelector('#spinner').classList.remove('hidden');
-    document.querySelector('#button-text').classList.add('hidden');
+    document.querySelector("#submit").disabled = true;
+    document.querySelector("#spinner").classList.remove("hidden");
+    document.querySelector("#button-text").classList.add("hidden");
   } else {
-    document.querySelector('#submit').disabled = false;
-    document.querySelector('#spinner').classList.add('hidden');
-    document.querySelector('#button-text').classList.remove('hidden');
+    document.querySelector("#submit").disabled = false;
+    document.querySelector("#spinner").classList.add("hidden");
+    document.querySelector("#button-text").classList.remove("hidden");
   }
 }
 
 function setDpmCheckerLink(url) {
-  document.querySelector('#dpm-integration-checker').href = url;
+  document.querySelector("#dpm-integration-checker").href = url;
 }

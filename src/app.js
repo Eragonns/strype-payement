@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 
-app.post("/create-payement-intent", stripeController);
+app.post("/create-payment-intent", stripeController);
 
 app.use(notFound);
 
